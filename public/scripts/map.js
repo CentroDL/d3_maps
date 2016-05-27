@@ -1,57 +1,33 @@
 (function(){
-console.log("map.js loaded");
-
-
 var width = 960,
-    height = 600;
+    height = 700;
 
-var rateById = d3.map();
+/*var projection = d3.geo.albersUsa()
+  .scale(82485)
+  .translate([-23700,5980]);*/
 
-var quantize = d3.scale.quantize()
-    .domain([0, .15])
-    .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+var projection = d3.geo.conicConformal()
+      .parallels([40 + 40 / 60, 41 + 2 / 60])
+      .scale(70000)
+      .rotate([74, -40 - 45 / 60]);
 
-var projection = d3.geo.albersUsa()
-    .scale(1280)
-    .translate([width / 2, height / 2]);
-
-var path = d3.geo.path()
-    .projection(projection);
+var path = d3.geo.path().projection(projection);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-// var queue = d3_queue.queue();
-
 d3_queue.queue()
-    .defer(d3.json, "/data/us.json")
-    .defer(d3.tsv, "/data/unemployment.tsv", function(d) { rateById.set(d.id, +d.rate); })
+    .defer(d3.json, "/data/nyc-zip-code.json")
     .await(ready);
-// queue.defer(d3.json, "/data/us.json");
-// queue.defer(d3.tsv, "/data/unemployment.tsv", function(d) { rateById.set(d.id, +d.rate); });
-// queue.awaitAll(ready);
 
-
-function ready(error, us) {
-  console.log("ready fired!");
-  if (error) throw error;
-
+function ready(error, map) {
   svg.append("g")
-      .attr("class", "counties")
+      .attr("class", "zipcode")
     .selectAll("path")
-      .data(topojson.feature(us, us.objects.counties).features)
+      .data(map.features)
     .enter().append("path")
-      .attr("class", function(d) { return quantize(rateById.get(d.id)); })
-      .attr("d", path);
-
-  svg.append("path")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-      .attr("class", "states")
       .attr("d", path);
 }
 
-d3.select(self.frameElement).style("height", height + "px");
-
-
-})();
+})()
