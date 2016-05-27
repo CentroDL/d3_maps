@@ -14,6 +14,7 @@ app.get("/", function(req, res){
 })
 
 app.get("/data/us.json", function(req, res){
+  console.log("sending " + __dirname + "/data/us.json")
   res.sendFile( path.resolve( __dirname + "/data/us.json") );
 })
 

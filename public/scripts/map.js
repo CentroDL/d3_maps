@@ -21,12 +21,15 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-var queue = d3_queue.queue();
+// var queue = d3_queue.queue();
 
-
-queue.defer(d3.json, "/data/us.json");
-queue.defer(d3.tsv, "/data/unemployment.tsv", function(d) { rateById.set(d.id, +d.rate); });
-queue.awaitAll(ready);
+queue()
+    .defer(d3.json, "/data/us.json")
+    .defer(d3.tsv, "/data/unemployment.tsv", function(d) { rateById.set(d.id, +d.rate); })
+    .await(ready);
+// queue.defer(d3.json, "/data/us.json");
+// queue.defer(d3.tsv, "/data/unemployment.tsv", function(d) { rateById.set(d.id, +d.rate); });
+// queue.awaitAll(ready);
 
 
 function ready(error, us) {
