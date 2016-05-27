@@ -1,3 +1,4 @@
+(function(){
 console.log("map.js loaded");
 
 
@@ -23,7 +24,7 @@ var svg = d3.select("body").append("svg")
 
 // var queue = d3_queue.queue();
 
-queue()
+d3_queue.queue()
     .defer(d3.json, "/data/us.json")
     .defer(d3.tsv, "/data/unemployment.tsv", function(d) { rateById.set(d.id, +d.rate); })
     .await(ready);
@@ -53,3 +54,4 @@ function ready(error, us) {
 d3.select(self.frameElement).style("height", height + "px");
 
 
+})();
