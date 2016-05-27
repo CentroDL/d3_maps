@@ -1,7 +1,7 @@
   console.log("map.js loaded");
 
 
-var width = 960,
+var width  = 960,
     height = 600;
 
 var projection = d3.geo.albersUsa()
