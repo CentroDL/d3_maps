@@ -13,14 +13,11 @@ app.get("/", function(req, res){
   res.sendFile( path.resolve( __dirname + "/public/views/index.html"));
 })
 
-app.get("/data/us.json", function(req, res){
-  console.log("sending " + __dirname + "/data/us.json")
-  res.sendFile( path.resolve( __dirname + "/data/us.json") );
-})
+app.get("/data/:file", function(req, res){
+  console.log("Sending " + req.params.file );
+  res.sendFile( path.resolve( __dirname + "/data/" + req.params.file ) );
+});
 
-app.get("/data/unemployment.tsv", function(req, res){
-  res.sendFile( path.resolve( __dirname + "/data/unemployment.tsv") );
-})
 
 var port = process.env.PORT || 3000;
 app.listen( port, function(){
