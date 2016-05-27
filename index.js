@@ -5,11 +5,20 @@ var path    = require("path")
 var app = express();
 
 app.use( express.static("public") );
+// app.use( "/data", express.static("data") );
 app.use( express.static("bower_components") );
 app.use( morgan("dev") );
 
 app.get("/", function(req, res){
   res.sendFile( path.resolve( __dirname + "/public/views/index.html"));
+})
+
+app.get("/data/us.json", function(req, res){
+  res.sendFile( path.resolve( __dirname + "/data/us.json") );
+})
+
+app.get("/data/unemployment.tsv", function(req, res){
+  res.sendFile( path.resolve( __dirname + "/data/unemployment.tsv") );
 })
 
 var port = process.env.PORT || 3000;
